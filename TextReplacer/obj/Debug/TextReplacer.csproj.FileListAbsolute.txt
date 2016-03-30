@@ -1,0 +1,1 @@
+D:\SourceTree\TextReplacer\TextReplacer\bin\Debug\TextReplacer.exe.config
