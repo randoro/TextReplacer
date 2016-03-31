@@ -1,1 +1,9 @@
 D:\SourceTree\TextReplacer\TextReplacer\bin\Debug\TextReplacer.exe.config
+D:\SourceTree\TextReplacer\TextReplacer\bin\Debug\TextReplacer.exe
+D:\SourceTree\TextReplacer\TextReplacer\bin\Debug\TextReplacer.pdb
+D:\SourceTree\TextReplacer\TextReplacer\obj\Debug\TextReplacer.csprojResolveAssemblyReference.cache
+D:\SourceTree\TextReplacer\TextReplacer\obj\Debug\TextReplacer.MainForm.resources
+D:\SourceTree\TextReplacer\TextReplacer\obj\Debug\TextReplacer.Properties.Resources.resources
+D:\SourceTree\TextReplacer\TextReplacer\obj\Debug\TextReplacer.csproj.GenerateResource.Cache
+D:\SourceTree\TextReplacer\TextReplacer\obj\Debug\TextReplacer.exe
+D:\SourceTree\TextReplacer\TextReplacer\obj\Debug\TextReplacer.pdb
