@@ -32,10 +32,16 @@ namespace TextReplacer
         {
             while (running)
             {
-                if (textIn.Count > 0)
+                if (lines > 0 && currentString < lines)
                 {
-                    buffer.WriteData(textIn[currentString]);
-                    currentString = (currentString + 1)%textIn.Count;
+                    if (buffer.WriteData(textIn[currentString]))
+                    {
+                        currentString = (currentString + 1);
+                    }
+                }
+                else
+                {
+                    running = false;
                 }
             }
 

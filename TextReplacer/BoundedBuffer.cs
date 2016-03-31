@@ -93,17 +93,26 @@ namespace TextReplacer
 
         }
 
-        public void ReadData()
+        public string ReadData()
         {
             Monitor.Enter(lockObject);
+            string str;
             try
             {
-
+                if (status[readPos].Equals(BufferStatus.New)) //change
+                {
+                    str = strArray[readPos];
+                    strArray[readPos] = "";
+                    status[readPos] = BufferStatus.Empty; //change
+                    readPos = (readPos + 1) % max;
+                    return str;
+                }
             }
             finally
             {
                 Monitor.Exit(lockObject);
             }
+            return null;
         }
 
         private void ReplaceAt(string strSource, string strReplace, int pos, int size)
@@ -124,7 +133,7 @@ namespace TextReplacer
             }
         }
 
-        public void WriteData(string s)
+        public bool WriteData(string s)
         {
             Monitor.Enter(lockObject);
             try
@@ -134,6 +143,7 @@ namespace TextReplacer
                     strArray[writePos] = s;
                     status[writePos] = BufferStatus.New;
                     writePos = (writePos + 1)%max;
+                    return true;
                 }
 
             }
@@ -141,6 +151,7 @@ namespace TextReplacer
             {
                 Monitor.Exit(lockObject);
             }
+            return false;
         }
 
     }

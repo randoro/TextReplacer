@@ -20,6 +20,7 @@
             }
 
             writer.Dispose();
+            reader.Dispose();
 
             base.Dispose(disposing);
         }
@@ -32,10 +33,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.sourceTab = new System.Windows.Forms.TabPage();
             this.richTextBoxSource = new System.Windows.Forms.RichTextBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.destTab = new System.Windows.Forms.TabPage();
             this.richTextBoxDestination = new System.Windows.Forms.RichTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -45,33 +46,35 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.copyButton = new System.Windows.Forms.Button();
+            this.resetButton = new System.Windows.Forms.Button();
+            this.tabControl.SuspendLayout();
+            this.sourceTab.SuspendLayout();
+            this.destTab.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tabControl1
+            // tabControl
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(13, 183);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(816, 416);
-            this.tabControl1.TabIndex = 0;
+            this.tabControl.Controls.Add(this.sourceTab);
+            this.tabControl.Controls.Add(this.destTab);
+            this.tabControl.Location = new System.Drawing.Point(13, 183);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(816, 416);
+            this.tabControl.TabIndex = 0;
             // 
-            // tabPage1
+            // sourceTab
             // 
-            this.tabPage1.Controls.Add(this.richTextBoxSource);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(808, 390);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.sourceTab.Controls.Add(this.richTextBoxSource);
+            this.sourceTab.Location = new System.Drawing.Point(4, 22);
+            this.sourceTab.Name = "sourceTab";
+            this.sourceTab.Padding = new System.Windows.Forms.Padding(3);
+            this.sourceTab.Size = new System.Drawing.Size(808, 390);
+            this.sourceTab.TabIndex = 0;
+            this.sourceTab.Text = "Source";
+            this.sourceTab.UseVisualStyleBackColor = true;
             // 
             // richTextBoxSource
             // 
@@ -82,16 +85,16 @@
             this.richTextBoxSource.TabIndex = 0;
             this.richTextBoxSource.Text = "";
             // 
-            // tabPage2
+            // destTab
             // 
-            this.tabPage2.Controls.Add(this.richTextBoxDestination);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(808, 390);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.destTab.Controls.Add(this.richTextBoxDestination);
+            this.destTab.Location = new System.Drawing.Point(4, 22);
+            this.destTab.Name = "destTab";
+            this.destTab.Padding = new System.Windows.Forms.Padding(3);
+            this.destTab.Size = new System.Drawing.Size(808, 390);
+            this.destTab.TabIndex = 1;
+            this.destTab.Text = "Destination";
+            this.destTab.UseVisualStyleBackColor = true;
             // 
             // richTextBoxDestination
             // 
@@ -168,24 +171,45 @@
             // openTextFileToolStripMenuItem
             // 
             this.openTextFileToolStripMenuItem.Name = "openTextFileToolStripMenuItem";
-            this.openTextFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openTextFileToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.openTextFileToolStripMenuItem.Text = "Open Text File";
             this.openTextFileToolStripMenuItem.Click += new System.EventHandler(this.openTextFileToolStripMenuItem_Click);
+            // 
+            // copyButton
+            // 
+            this.copyButton.Location = new System.Drawing.Point(622, 128);
+            this.copyButton.Name = "copyButton";
+            this.copyButton.Size = new System.Drawing.Size(203, 23);
+            this.copyButton.TabIndex = 4;
+            this.copyButton.Text = "Copy to Destination Tab";
+            this.copyButton.UseVisualStyleBackColor = true;
+            this.copyButton.Click += new System.EventHandler(this.copyButton_Click);
+            // 
+            // resetButton
+            // 
+            this.resetButton.Location = new System.Drawing.Point(622, 154);
+            this.resetButton.Name = "resetButton";
+            this.resetButton.Size = new System.Drawing.Size(203, 23);
+            this.resetButton.TabIndex = 5;
+            this.resetButton.Text = "Clear Dest. and remove marks";
+            this.resetButton.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(841, 611);
+            this.Controls.Add(this.resetButton);
+            this.Controls.Add(this.copyButton);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tabControl);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "TextReplacer";
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
+            this.tabControl.ResumeLayout(false);
+            this.sourceTab.ResumeLayout(false);
+            this.destTab.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -197,10 +221,10 @@
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabPage sourceTab;
         private System.Windows.Forms.RichTextBox richTextBoxSource;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage destTab;
         private System.Windows.Forms.RichTextBox richTextBoxDestination;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox textBox2;
@@ -210,6 +234,8 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openTextFileToolStripMenuItem;
+        private System.Windows.Forms.Button copyButton;
+        private System.Windows.Forms.Button resetButton;
     }
 }
 

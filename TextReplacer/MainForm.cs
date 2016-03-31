@@ -18,6 +18,7 @@ namespace TextReplacer
         private BoundedBuffer buffer;
         private List<string> textIn;
         private Writer writer;
+        private Reader reader;
 
         public MainForm()
         {
@@ -25,14 +26,16 @@ namespace TextReplacer
 
 
             textIn = new List<string>();
+            buffer = new BoundedBuffer(10, richTextBoxSource, false, "something", "somethingelse");
 
         }
 
 
         private void newFile()
         {
-            buffer = new BoundedBuffer(textIn.Count, richTextBoxSource, false, "something", "somethingelse");
-            writer = new Writer(buffer, textIn);
+
+            writer = new Writer(buffer, new List<string>(richTextBoxSource.Lines));
+            reader = new Reader(buffer, richTextBoxDestination, richTextBoxSource.Lines.Length);
         }
 
         private void openTextFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -65,7 +68,6 @@ namespace TextReplacer
 
                                 richTextBoxSource.Lines = textIn.ToArray();
 
-                                newFile();
 
                             }
                         }
@@ -77,6 +79,11 @@ namespace TextReplacer
                     MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
                 }
             }
+        }
+
+        private void copyButton_Click(object sender, EventArgs e)
+        {
+            newFile();
         }
 
     }
