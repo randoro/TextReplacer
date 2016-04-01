@@ -39,7 +39,10 @@ namespace TextReplacer
             readerThread.Start();
         }
 
-        public void ReaderLoop()
+        /// <summary>
+        /// Thread start.
+        /// </summary>
+        private void ReaderLoop()
         {
             while (running)
             {
@@ -61,13 +64,21 @@ namespace TextReplacer
 
         }
 
+        /// <summary>
+        /// Disposes of the thread.
+        /// </summary>
         public void Dispose()
         {
             running = false;
             readerThread.Abort();
         }
 
-
+        /// <summary>
+        /// Sets text of rtxBox from List of strings, called when Reading is done.
+        /// </summary>
+        /// <param name="rtxBox"></param>
+        /// <param name="GetText"></param>
+        /// <param name="buffer"></param>
         private void Copy(RichTextBox rtxBox, List<string> GetText, BoundedBuffer buffer)
         {
             if (rtxBox.InvokeRequired)

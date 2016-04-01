@@ -27,7 +27,10 @@ namespace TextReplacer
             modifyThread.Start();
         }
 
-        public void ModifyLoop()
+        /// <summary>
+        /// Thread start.
+        /// </summary>
+        private void ModifyLoop()
         {
             while (running)
             {
@@ -48,6 +51,10 @@ namespace TextReplacer
 
         }
 
+
+        /// <summary>
+        /// Disposes of the thread.
+        /// </summary>
         public void Dispose()
         {
             running = false;

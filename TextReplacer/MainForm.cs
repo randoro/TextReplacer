@@ -30,10 +30,12 @@ namespace TextReplacer
 
         }
 
-
+        /// <summary>
+        /// Starts the three threads by creating Objects.
+        /// </summary>
         private void startCopying()
         {
-                buffer = new BoundedBuffer(10, richTextBoxSource, richTextBoxDestination, notifyBox.Checked, findBox.Text, replaceBox.Text);
+                buffer = new BoundedBuffer(10, richTextBoxSource, notifyBox.Checked, findBox.Text, replaceBox.Text);
                 writer = new Writer(buffer, new List<string>(richTextBoxSource.Lines));
                 modifier = new Modifier(buffer, richTextBoxSource.Lines.Length);
                 reader = new Reader(buffer, richTextBoxDestination, countLabel, richTextBoxSource.Lines.Length);

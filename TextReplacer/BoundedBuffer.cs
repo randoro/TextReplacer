@@ -16,59 +16,97 @@ namespace TextReplacer
     class BoundedBuffer
     {
 
+        /// <summary>
+        /// The actual string buffer array.
+        /// </summary>
+        private string[] strArray;
 
-        private string[] strArray; //The actual string buffer array
-        private BufferStatus[] status; //An array of BufferStatus objects,
-        //one for each element in buffer.
-        private int max; //Elements in buffer.
+        /// <summary>
+        /// An array of BufferStatus objects,
+        /// one for each element in buffer.
+        /// </summary>
+        private BufferStatus[] status; 
+        
+        /// <summary>
+        /// Elements in buffer.
+        /// </summary>
+        private int max;
 
-        //Position pointers for each thread.
+
+        
+        // Position pointers for each thread.
         private int writePos;
         private int readPos;
         private int findPos;
 
-        //The rich textbox to mark in.
+        /// <summary>
+        /// The rich textbox to mark in.
+        /// </summary>
         public RichTextBox rtxBoxSource { get; private set; }
 
-        //The rich textbox to mark in.
-        public RichTextBox rtxBoxDest { get; private set; }
-
-        //The string to search for if any.
+        /// <summary>
+        /// The string to search for if any.
+        /// </summary>
         public string findString { get; private set; }
 
-        //The replace string if any.
+        /// <summary>
+        /// The replace string if any.
+        /// </summary>
         public string replaceString { get; private set; }
 
-        //The number of Replacements.
+        /// <summary>
+        /// The number of Replacements.
+        /// </summary>
         public int nrOfReplacments { get; private set; }
 
-        //The startIndex in the rich text box.
+        /// <summary>
+        /// The startIndex in the rich text box.
+        /// </summary>
         public int start { get; private set; }
 
-        //User notifier
+        /// <summary>
+        /// User notifier
+        /// </summary>
         private bool notify;
 
-        //For mutal exclusion
+        /// <summary>
+        /// For mutal exclusion
+        /// </summary>
         private object lockObject = new Object();
 
-        //Delegate used in textbox invoke for MARKING in Rtx box.
+        /// <summary>
+        /// Delegate used in textbox invoke for MARKING in Rtx box.
+        /// </summary>
+        /// <param name="rtxBox"></param>
+        /// <param name="indexStart"></param>
+        /// <param name="length"></param>
         private delegate void Marker(RichTextBox rtxBox, int indexStart, int length);
 
 
-        //Delegate used in textbox invoke for SELECTING in Rtx box.
+        /// <summary>
+        /// Delegate used in textbox invoke for SELECTING in Rtx box.
+        /// </summary>
+        /// <param name="rtxBox"></param>
+        /// <param name="fString"></param>
+        /// <param name="offset"></param>
+        /// <param name="toCount"></param>
         private delegate void MarkerAll(RichTextBox rtxBox, string fString, bool offset, bool toCount);
 
-        //Delegate used in textbox invoke for SELECTING in Rtx box.
+        /// <summary>
+        /// Delegate used in textbox invoke for SELECTING in Rtx box.
+        /// </summary>
+        /// <param name="rtxBoxDest"></param>
+        /// <param name="startIndex"></param>
+        /// <param name="length"></param>
         private delegate void Selector(RichTextBox rtxBoxDest, int startIndex, int length);
 
 
-        public BoundedBuffer(int elements, RichTextBox rtxBoxSource, RichTextBox rtxBoxDest, bool notify, string find, string replace)
+        public BoundedBuffer(int elements, RichTextBox rtxBoxSource, bool notify, string find, string replace)
         {
             max = elements;
             strArray = new string[max];
             status = new BufferStatus[max];
             this.rtxBoxSource = rtxBoxSource;
-            this.rtxBoxDest = rtxBoxDest;
             this.notify = notify;
 
             nrOfReplacments = 0;
@@ -77,7 +115,12 @@ namespace TextReplacer
 
         }
 
-
+        /// <summary>
+        /// Marks a section of a specific rtxBox.
+        /// </summary>
+        /// <param name="rtxBox"></param>
+        /// <param name="indexStart"></param>
+        /// <param name="length"></param>
         private void Mark(RichTextBox rtxBox, int indexStart, int length)
         {
             if (rtxBox.InvokeRequired)
@@ -93,21 +136,10 @@ namespace TextReplacer
             }
         }
 
-        //private void MarkDest(int indexStart, int length)
-        //{
-        //    if (rtxBoxDest.InvokeRequired)
-        //    {
-        //        Marker newMarker = new Marker(MarkDest);
-        //        rtxBoxDest.Invoke(newMarker, new object[] { indexStart, length });
-        //    }
-        //    else
-        //    {
-        //        rtxBoxDest.SelectionBackColor = Color.Green;
-        //        rtxBoxDest.SelectionStart = indexStart;
-        //        rtxBoxDest.SelectionLength = length;
-        //    }
-        //}
-
+        /// <summary>
+        /// Called by Modify Thread. Modifies the buffer.
+        /// </summary>
+        /// <returns></returns>
         public bool Modify()
         {
             Monitor.Enter(lockObject);
@@ -119,27 +151,9 @@ namespace TextReplacer
 
 
                     ReplaceAt(str);
-                    //string newString = Regex.Replace(str, findString, replaceString, RegexOptions.IgnoreCase);
-                    //strArray[findPos] = newString;
-
-                    //List<int> indexesSource = AllIndexesOf(str, findString);
-                    //for (int i = 0; i < indexesSource.Count; i++)
-                    //{
-                    //    MarkSource(startSource + indexesSource[i], findString.Length);
-                    //    nbrReplacement++;
-                    //}
-
-                    //List<int> indexesDest = AllIndexesOf(newString, replaceString);
-                    //for (int i = 0; i < indexesDest.Count; i++)
-                    //{
-                    //    MarkDest(startDest + indexesDest[i], replaceString.Length);
-                    //}
-
                     start += str.Length + 1;
                     status[findPos] = BufferStatus.Checked;
                     findPos = (findPos + 1) % max;
-                    //startSource += str.Length + 1;
-                    //startDest += newString.Length + 1;
                     return true;
                 }
             }
@@ -151,6 +165,11 @@ namespace TextReplacer
 
         }
 
+
+        /// <summary>
+        /// Called by Read Thread. Reads the buffer.
+        /// </summary>
+        /// <returns></returns>
         public string ReadData()
         {
             Monitor.Enter(lockObject);
@@ -172,7 +191,12 @@ namespace TextReplacer
             return null;
         }
 
-        private void ReplaceAt(string strSource) //, string strReplace, int pos, int size)
+
+        /// <summary>
+        /// Replaces string and substrings at the current modify location, if needed.
+        /// </summary>
+        /// <param name="strSource"></param>
+        private void ReplaceAt(string strSource)
         {
             if (!String.IsNullOrEmpty(strSource) && !String.IsNullOrEmpty(findString) && !String.IsNullOrEmpty(replaceString))
             {
@@ -229,10 +253,17 @@ namespace TextReplacer
             }
 
 
-
-
         }
 
+
+
+        /// <summary>
+        /// Looks at SOURCE! rtxBox and marks all sections containing the word in the ARGUMENT rtxBox.
+        /// </summary>
+        /// <param name="rtxBoxDest"></param>
+        /// <param name="fString"></param>
+        /// <param name="offset"></param>
+        /// <param name="toCount"></param>
         public void MarkAll(RichTextBox rtxBoxDest, string fString, bool offset, bool toCount)
         {
             if (rtxBoxSource.InvokeRequired)
@@ -270,6 +301,12 @@ namespace TextReplacer
 
         }
 
+        /// <summary>
+        /// Selects a selection in rtxbox.
+        /// </summary>
+        /// <param name="rtxBoxDest"></param>
+        /// <param name="startIndex"></param>
+        /// <param name="length"></param>
         public void Select(RichTextBox rtxBoxDest, int startIndex, int length)
         {
 
@@ -294,7 +331,11 @@ namespace TextReplacer
 
 
         
-
+        /// <summary>
+        /// Called by Writer Thread. Writes the buffer.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public bool WriteData(string s)
         {
             Monitor.Enter(lockObject);
@@ -316,12 +357,18 @@ namespace TextReplacer
             return false;
         }
 
+
+        /// <summary>
+        /// Gets a list of all indexes where a substring occurs inside of a string
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static List<int> AllIndexesOf(string str, string value)
         {
             List<int> indexes = new List<int>();
             if (String.IsNullOrEmpty(value))
                 return indexes;
-                //throw new ArgumentException("The string to find may not be empty", value);
             
             for (int index = 0; ; index += value.Length)
             {

@@ -28,7 +28,11 @@ namespace TextReplacer
             writerThread.Start();
         }
 
-        public void WriterLoop()
+
+        /// <summary>
+        /// Thread start.
+        /// </summary>
+        private void WriterLoop()
         {
             while (running)
             {
@@ -47,6 +51,9 @@ namespace TextReplacer
 
         }
 
+        /// <summary>
+        /// Disposes of the thread.
+        /// </summary>
         public void Dispose()
         {
             running = false;
