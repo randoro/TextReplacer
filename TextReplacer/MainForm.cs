@@ -18,6 +18,7 @@ namespace TextReplacer
         private BoundedBuffer buffer;
         private List<string> textIn;
         private Writer writer;
+        private Modifier modifier;
         private Reader reader;
 
         public MainForm()
@@ -26,16 +27,16 @@ namespace TextReplacer
 
 
             textIn = new List<string>();
-            buffer = new BoundedBuffer(10, richTextBoxSource, false, "something", "somethingelse");
 
         }
 
 
-        private void newFile()
+        private void startCopying()
         {
-
-            writer = new Writer(buffer, new List<string>(richTextBoxSource.Lines));
-            reader = new Reader(buffer, richTextBoxDestination, richTextBoxSource.Lines.Length);
+                buffer = new BoundedBuffer(10, richTextBoxSource, richTextBoxDestination, notifyBox.Checked, findBox.Text, replaceBox.Text);
+                writer = new Writer(buffer, new List<string>(richTextBoxSource.Lines));
+                modifier = new Modifier(buffer, richTextBoxSource.Lines.Length);
+                reader = new Reader(buffer, richTextBoxDestination, countLabel, richTextBoxSource.Lines.Length);
         }
 
         private void openTextFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -83,7 +84,25 @@ namespace TextReplacer
 
         private void copyButton_Click(object sender, EventArgs e)
         {
-            newFile();
+            startCopying();
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+            richTextBoxSource.Lines = textIn.ToArray();
+            richTextBoxDestination.Clear();
+        }
+
+        private void saveDestinationFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.ShowDialog();
+        }
+
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            // Get file name.
+            string name = saveFileDialog1.FileName;
+            File.WriteAllLines(name, richTextBoxDestination.Lines);
         }
 
     }

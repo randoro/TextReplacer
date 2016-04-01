@@ -19,8 +19,18 @@
 
             }
 
-            writer.Dispose();
-            reader.Dispose();
+            if (writer != null)
+            {
+                writer.Dispose();
+            }
+            if (modifier != null)
+            {
+                modifier.Dispose();
+            }
+            if (reader != null)
+            {
+                reader.Dispose();
+            }
 
             base.Dispose(disposing);
         }
@@ -39,15 +49,19 @@
             this.destTab = new System.Windows.Forms.TabPage();
             this.richTextBoxDestination = new System.Windows.Forms.RichTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.replaceBox = new System.Windows.Forms.TextBox();
+            this.findBox = new System.Windows.Forms.TextBox();
+            this.replaceLabel = new System.Windows.Forms.Label();
+            this.findLabel = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyButton = new System.Windows.Forms.Button();
             this.resetButton = new System.Windows.Forms.Button();
+            this.countLabel = new System.Windows.Forms.Label();
+            this.notifyBox = new System.Windows.Forms.CheckBox();
+            this.saveDestinationFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.tabControl.SuspendLayout();
             this.sourceTab.SuspendLayout();
             this.destTab.SuspendLayout();
@@ -107,10 +121,12 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.textBox2);
-            this.groupBox1.Controls.Add(this.textBox1);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.notifyBox);
+            this.groupBox1.Controls.Add(this.countLabel);
+            this.groupBox1.Controls.Add(this.replaceBox);
+            this.groupBox1.Controls.Add(this.findBox);
+            this.groupBox1.Controls.Add(this.replaceLabel);
+            this.groupBox1.Controls.Add(this.findLabel);
             this.groupBox1.Location = new System.Drawing.Point(13, 46);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(567, 122);
@@ -118,37 +134,37 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
             // 
-            // textBox2
+            // replaceBox
             // 
-            this.textBox2.Location = new System.Drawing.Point(93, 54);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 3;
+            this.replaceBox.Location = new System.Drawing.Point(93, 54);
+            this.replaceBox.Name = "replaceBox";
+            this.replaceBox.Size = new System.Drawing.Size(100, 20);
+            this.replaceBox.TabIndex = 3;
             // 
-            // textBox1
+            // findBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(93, 28);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 2;
+            this.findBox.Location = new System.Drawing.Point(93, 28);
+            this.findBox.Name = "findBox";
+            this.findBox.Size = new System.Drawing.Size(100, 20);
+            this.findBox.TabIndex = 2;
             // 
-            // label2
+            // replaceLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(52, 58);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "label2";
+            this.replaceLabel.AutoSize = true;
+            this.replaceLabel.Location = new System.Drawing.Point(15, 57);
+            this.replaceLabel.Name = "replaceLabel";
+            this.replaceLabel.Size = new System.Drawing.Size(72, 13);
+            this.replaceLabel.TabIndex = 1;
+            this.replaceLabel.Text = "Replace with:";
             // 
-            // label1
+            // findLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(52, 31);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
+            this.findLabel.AutoSize = true;
+            this.findLabel.Location = new System.Drawing.Point(15, 31);
+            this.findLabel.Name = "findLabel";
+            this.findLabel.Size = new System.Drawing.Size(30, 13);
+            this.findLabel.TabIndex = 0;
+            this.findLabel.Text = "Find:";
             // 
             // menuStrip1
             // 
@@ -163,7 +179,8 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openTextFileToolStripMenuItem});
+            this.openTextFileToolStripMenuItem,
+            this.saveDestinationFileToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -193,6 +210,37 @@
             this.resetButton.TabIndex = 5;
             this.resetButton.Text = "Clear Dest. and remove marks";
             this.resetButton.UseVisualStyleBackColor = true;
+            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
+            // 
+            // countLabel
+            // 
+            this.countLabel.AutoSize = true;
+            this.countLabel.Location = new System.Drawing.Point(413, 92);
+            this.countLabel.Name = "countLabel";
+            this.countLabel.Size = new System.Drawing.Size(98, 13);
+            this.countLabel.TabIndex = 6;
+            this.countLabel.Text = "No. Replacements:";
+            // 
+            // notifyBox
+            // 
+            this.notifyBox.AutoSize = true;
+            this.notifyBox.Location = new System.Drawing.Point(93, 87);
+            this.notifyBox.Name = "notifyBox";
+            this.notifyBox.Size = new System.Drawing.Size(158, 17);
+            this.notifyBox.TabIndex = 7;
+            this.notifyBox.Text = "Notify user on every match?";
+            this.notifyBox.UseVisualStyleBackColor = true;
+            // 
+            // saveDestinationFileToolStripMenuItem
+            // 
+            this.saveDestinationFileToolStripMenuItem.Name = "saveDestinationFileToolStripMenuItem";
+            this.saveDestinationFileToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.saveDestinationFileToolStripMenuItem.Text = "Save Destination File";
+            this.saveDestinationFileToolStripMenuItem.Click += new System.EventHandler(this.saveDestinationFileToolStripMenuItem_Click);
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
             // 
             // MainForm
             // 
@@ -227,15 +275,19 @@
         private System.Windows.Forms.TabPage destTab;
         private System.Windows.Forms.RichTextBox richTextBoxDestination;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox replaceBox;
+        private System.Windows.Forms.TextBox findBox;
+        private System.Windows.Forms.Label replaceLabel;
+        private System.Windows.Forms.Label findLabel;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openTextFileToolStripMenuItem;
         private System.Windows.Forms.Button copyButton;
         private System.Windows.Forms.Button resetButton;
+        private System.Windows.Forms.Label countLabel;
+        private System.Windows.Forms.CheckBox notifyBox;
+        private System.Windows.Forms.ToolStripMenuItem saveDestinationFileToolStripMenuItem;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 

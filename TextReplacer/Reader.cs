@@ -14,6 +14,7 @@ namespace TextReplacer
         private Thread readerThread;
         private BoundedBuffer buffer;
         private RichTextBox rtxBox;
+        private Label countLabel;
         public bool running { get; set; }
 
         private int currentString;
@@ -22,13 +23,14 @@ namespace TextReplacer
         public List<string> GetText { get; private set; }
 
         //Delegate used in textbox invoke for COPYING to Rtx box.
-        private delegate void Copyer();
+        private delegate void Copyer(RichTextBox rtxBox, List<string> GetText, BoundedBuffer buffer);
 
 
-        public Reader(BoundedBuffer buffer, RichTextBox rtxBox, int nrOfStrings)
+        public Reader(BoundedBuffer buffer, RichTextBox rtxBox, Label countLabel, int nrOfStrings)
         {
             this.buffer = buffer;
             this.rtxBox = rtxBox;
+            this.countLabel = countLabel;
             currentString = 0;
             lines = nrOfStrings;
             GetText = new List<string>();
@@ -52,7 +54,7 @@ namespace TextReplacer
                 }
                 else
                 {
-                    Copy();
+                    Copy(rtxBox, GetText, buffer);
                     running = false;
                 }
             }
@@ -66,16 +68,20 @@ namespace TextReplacer
         }
 
 
-        private void Copy()
+        private void Copy(RichTextBox rtxBox, List<string> GetText, BoundedBuffer buffer)
         {
             if (rtxBox.InvokeRequired)
             {
                 Copyer newMarker = new Copyer(Copy);
-                rtxBox.Invoke(newMarker, new object[] { });
+                rtxBox.Invoke(newMarker, new object[] { rtxBox, GetText, buffer });
             }
             else
             {
                 rtxBox.Lines = GetText.ToArray();
+                buffer.MarkAll(rtxBox, buffer.findString, true, true);
+                buffer.MarkAll(rtxBox, buffer.findString, true, false);
+
+                countLabel.Text = "No. Replacements: " + buffer.nrOfReplacments;
             }
         }
     }
