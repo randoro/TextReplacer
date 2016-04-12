@@ -21,6 +21,10 @@ namespace TextReplacer
         private Modifier modifier;
         private Reader reader;
 
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public MainForm()
         {
             InitializeComponent();
@@ -41,6 +45,13 @@ namespace TextReplacer
                 reader = new Reader(buffer, richTextBoxDestination, countLabel, richTextBoxSource.Lines.Length);
         }
 
+
+
+        /// <summary>
+        /// Called when clicking 'Open Text File' button in StripMenu.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void openTextFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Stream myStream = null;
@@ -84,22 +95,43 @@ namespace TextReplacer
             }
         }
 
+        /// <summary>
+        /// Called when clicking the 'Copy to Destination' button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void copyButton_Click(object sender, EventArgs e)
         {
             startCopying();
         }
 
+        /// <summary>
+        /// Called when clicking the 'Clear Dest. and remove marks' button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void resetButton_Click(object sender, EventArgs e)
         {
             richTextBoxSource.Lines = textIn.ToArray();
             richTextBoxDestination.Clear();
         }
 
+        /// <summary>
+        /// Called when clicking 'Save Destination File' button in StripMenu.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveDestinationFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             saveFileDialog1.ShowDialog();
         }
 
+
+        /// <summary>
+        /// Called with event when save file specified is valid.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
             // Get file name.

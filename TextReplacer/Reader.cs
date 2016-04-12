@@ -10,16 +10,37 @@ namespace TextReplacer
 {
     class Reader
     {
-
+        /// <summary>
+        /// Reader Thread.
+        /// </summary>
         private Thread readerThread;
+        /// <summary>
+        /// Reference to boundedbuffer.
+        /// </summary>
         private BoundedBuffer buffer;
+        /// <summary>
+        /// Reference to destination textbox
+        /// </summary>
         private RichTextBox rtxBox;
+        /// <summary>
+        /// reference to 'No. Replacements' Label
+        /// </summary>
         private Label countLabel;
+        /// <summary>
+        /// Bool stating if thread is still running.
+        /// </summary>
         public bool running { get; set; }
 
+        /// <summary>
+        /// Counters for string iteration to 'GetText' list.
+        /// </summary>
         private int currentString;
         private int lines;
 
+
+        /// <summary>
+        /// Output list after reader thread is done.
+        /// </summary>
         public List<string> GetText { get; private set; }
 
         //Delegate used in textbox invoke for COPYING to Rtx box.

@@ -9,11 +9,22 @@ namespace TextReplacer
 {
     class Modifier
     {
-
+        /// <summary>
+        /// Modify Thread.
+        /// </summary>
         private Thread modifyThread;
+        /// <summary>
+        /// Reference to boundedbuffer.
+        /// </summary>
         private BoundedBuffer buffer;
+        /// <summary>
+        /// Bool stating if thread is still running.
+        /// </summary>
         public bool running { get; set; }
 
+        /// <summary>
+        /// Counters for string iteration to modify.
+        /// </summary>
         private int currentString;
         private int lines;
 

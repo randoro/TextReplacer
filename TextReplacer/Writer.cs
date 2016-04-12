@@ -9,11 +9,26 @@ namespace TextReplacer
 {
     class Writer
     {
+        /// <summary>
+        /// Writer thread.
+        /// </summary>
         private Thread writerThread;
+        /// <summary>
+        /// Reference to boundedbuffer.
+        /// </summary>
         private BoundedBuffer buffer;
+        /// <summary>
+        /// List of strings to write
+        /// </summary>
         private List<string> textIn;
+        /// <summary>
+        /// Bool stating if thread is still running.
+        /// </summary>
         public bool running { get; set; }
 
+        /// <summary>
+        /// Counters for string iteration in 'textIn' list.
+        /// </summary>
         private int currentString;
         private int lines;
 
